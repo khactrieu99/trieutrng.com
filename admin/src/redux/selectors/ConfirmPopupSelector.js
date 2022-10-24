@@ -1,0 +1,1 @@
+export const getConfirmPopupIsOpened = state => state.confirmPopup.isOpened;
