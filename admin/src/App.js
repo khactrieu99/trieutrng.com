@@ -12,10 +12,10 @@ const theme = {
 }
 
 function App(props) {
-  useEffect(() => {
-    props.fetchTags();
-    props.fetchArticles();
-  }, [])
+  // useEffect(() => {
+  //   props.fetchTags();
+  //   props.fetchArticles();
+  // }, [])
 
   return (
       <ThemeProvider theme={theme}> 

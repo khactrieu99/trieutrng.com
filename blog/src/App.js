@@ -1,34 +1,45 @@
-import Header from 'components/common/header';
+import Body from 'components/Body';
+import Header from 'components/Header';
 import { connect } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
-import { fetchArticles } from 'redux/features/ArticleSlice';
-import { useEffect } from 'react';
-import Body from 'components/common/body';
+import styled, { ThemeProvider } from 'styled-components';
 
 const theme = {
-  headerHeight: 100
+  // headerHeight: 50,
+  mainColor: "#4c695a",
+  blurColor: "#757575",
+  textColor: "#232333",
+  marginBottom: "30px"
 }
+
+const Container = styled.div`
+
+`
+const PageContainer = styled.div`
+  max-width: 800px;
+  margin: auto;
+  padding: 0 15px;
+`
 
 function App(props) {
-  useEffect(() => {
-    props.fetchArticles();
-  }, [])
 
   return (
-    <ThemeProvider theme={theme}> 
-      <Header/>
-      <Body/>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}> 
+        <Container>
+          <PageContainer>
+            <Header/>
+            <Body />
+          </PageContainer>
+        </Container>
+      </ThemeProvider>
   );
 }
-
 
 const mapStateToProps = state => ({
 
 })
 
 const mapDispatchToProps = {
-  fetchArticles
+
 }
 
 export default connect(

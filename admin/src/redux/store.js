@@ -5,13 +5,15 @@ import PageReducer from "./features/PageSlice";
 import TagReducer from "./features/TagSlice";
 import ArticleReducer from "./features/ArticleSlice";
 import ConfirmPopupReducer from "./features/ConfirmPopupSlice";
+import AuthReducer from "./features/AuthSlice";
 
 const rootReducer = combineReducers({
   loading: LoadingReducer,
   page: PageReducer,
   tag: TagReducer,
   article: ArticleReducer,
-  confirmPopup: ConfirmPopupReducer
+  confirmPopup: ConfirmPopupReducer,
+  auth: AuthReducer
 })
 
 const extraArgument = {

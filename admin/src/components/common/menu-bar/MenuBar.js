@@ -1,8 +1,10 @@
+import useAuth from "hooks/useAuth";
 import { Container, NormalElement, ActiveElement } from "./style";
 
 
 
 function MenuBar(props) {
+  const {authenticated, sessionExists} = useAuth();
 
   const onElementClick = (type) => {
     props.changePage(type);
@@ -11,6 +13,7 @@ function MenuBar(props) {
   return (
     <Container>
       { 
+        sessionExists() && 
         props.elements.map(element => (
           props.page === element ?
           <ActiveElement 

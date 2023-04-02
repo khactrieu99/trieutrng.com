@@ -1,11 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import Api from "api";
-import LoadingReducer from "./features/LoadingSlice";
 import ArticleReducer from "./features/ArticleSlice";
 
 const rootReducer = combineReducers({
-  loading: LoadingReducer,
-  article: ArticleReducer
+  article: ArticleReducer,
 })
 
 const extraArgument = {

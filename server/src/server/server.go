@@ -2,10 +2,13 @@ package server
 
 import (
 	"database/sql"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"trieutrng.dev/tech-blog/config"
+	"trieutrng.dev/tech-blog/middleware"
 
 	"github.com/gin-gonic/gin"
-
-	controllerIndex "trieutrng.dev/tech-blog/controller"
 )
 
 type server struct {
@@ -21,24 +24,29 @@ func NewServer(db *sql.DB) *server {
 	return s
 }
 
+func getCorsConfig() gin.HandlerFunc {
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{
+		"http://localhost:3000",
+		"http://localhost:3001",
+	}
+	config.AllowCredentials = true
+	return cors.New(config)
+}
+
 func (s *server) setupRouter() {
 	router := gin.Default()
 
-	var controller controllerIndex.Controller
-	apiRoutes := router.Group("/api")
-	{
-		articleRoutes := apiRoutes.Group("/article")
-		articleRoutes.GET("/", controller.GetAllArticles(s.db))
-		articleRoutes.GET("/:slug", controller.GetArticleBySlug(s.db))
-		articleRoutes.POST("/create", controller.CreateArticle(s.db))
-		articleRoutes.POST("/update", controller.UpdateArticle(s.db))
+	// set cors policy
+	router.Use(sessions.Sessions("session", cookie.NewStore(config.CookieSecret)))
+	router.Use(getCorsConfig())
 
-		tagRoutes := apiRoutes.Group("/tag")
-		tagRoutes.GET("/", controller.GetAllTags(s.db))
-		tagRoutes.GET("/:tag", controller.GetArticlesByTag(s.db))
-		tagRoutes.POST("/create", controller.CreateTag(s.db))
-		tagRoutes.POST("/remove", controller.RemoveTag(s.db))
-	}
+	publicGroup := router.Group("/api")
+	s.setPublicRoutes(publicGroup)
+
+	privateGroup := router.Group("/api")
+	privateGroup.Use(middleware.AuthRequired)
+	s.setPrivateRoutes(privateGroup)
 
 	s.router = router
 }

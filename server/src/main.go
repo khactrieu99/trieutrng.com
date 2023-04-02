@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-
 	"trieutrng.dev/tech-blog/config"
 	"trieutrng.dev/tech-blog/database"
 	"trieutrng.dev/tech-blog/server"

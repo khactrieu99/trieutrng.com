@@ -57,7 +57,7 @@ function ArticleCreator(props) {
     setUpdatable();
 
     setArticleData(articleData => {
-      lodashSet(articleData, e.target.name, e.target.value);
+      lodashSet(articleData, e.target.name, e.target.value || "");
       return articleData;
     });
   }

@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"trieutrng.dev/tech-blog/business"
 	"trieutrng.dev/tech-blog/database"
+	"trieutrng.dev/tech-blog/util"
 )
 
 // create article
@@ -90,7 +91,7 @@ func (c Controller) GetAllArticles(db *sql.DB) gin.HandlerFunc {
 				Description: item.Description,
 				Banner:      item.Banner,
 				Tags:        item.Tags,
-				CreatedAt:   item.CreatedAt.String(),
+				CreatedAt:   util.ConvertTimeToStringFormatted(item.CreatedAt),
 			}
 			allArticles = append(allArticles, briefArticle)
 		}
@@ -124,7 +125,7 @@ func (c Controller) GetArticlesByTag(db *sql.DB) gin.HandlerFunc {
 				Description: item.Description,
 				Banner:      item.Banner,
 				Tags:        item.Tags,
-				CreatedAt:   item.CreatedAt.String(),
+				CreatedAt:   util.ConvertTimeToStringFormatted(item.CreatedAt),
 			}
 			allArticles = append(allArticles, briefArticle)
 		}
@@ -134,6 +135,17 @@ func (c Controller) GetArticlesByTag(db *sql.DB) gin.HandlerFunc {
 }
 
 // Get detail  article by slug
+type ArticleResponse struct {
+	ID          int64    `json:"id"`
+	Title       string   `json:"title"`
+	Slug        string   `json:"slug"`
+	Content     string   `json:"content"`
+	Description string   `json:"description"`
+	Banner      string   `json:"banner"`
+	Tags        []string `json:"tags"`
+	CreatedAt   string   `json:"created_at"`
+}
+
 func (c Controller) GetArticleBySlug(db *sql.DB) gin.HandlerFunc {
 	storage := database.NewStorage(db)
 	buz := business.NewBusiness(storage)
@@ -149,6 +161,38 @@ func (c Controller) GetArticleBySlug(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, result)
+		article := ArticleResponse{
+			ID:          result.ID,
+			Title:       result.Title,
+			Slug:        result.Slug,
+			Content:     result.Content,
+			Description: result.Description,
+			Banner:      result.Banner,
+			Tags:        result.Tags,
+			CreatedAt:   util.ConvertTimeToStringFormatted(result.CreatedAt),
+		}
+
+		ctx.JSON(http.StatusOK, article)
+	}
+}
+
+func (c Controller) RemoveArticle(db *sql.DB) gin.HandlerFunc {
+	storage := database.NewStorage(db)
+	buz := business.NewBusiness(storage)
+
+	return func(ctx *gin.Context) {
+		id, err := buz.RemoveArticle(ctx)
+
+		if err != nil {
+			fmt.Printf("Can not remove article - %v\n", err)
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"id": id,
+		})
 	}
 }

@@ -1,7 +1,11 @@
 import { getAllTags, createTag, removeTag } from "./Tag"
-import { getAllArticles, createArticle, getArticleBySlug, updateArticle } from "./Article";
+import { getAllArticles, createArticle, getArticleBySlug, updateArticle, removeArticle } from "./Article";
+import { doLogin, doLogout } from "./Auth";
 
 export default {
+  doLogin, 
+  doLogout,
+
   getAllTags,
   createTag,
   removeTag,
@@ -9,5 +13,6 @@ export default {
   getAllArticles,
   createArticle,
   getArticleBySlug,
+  removeArticle,
   updateArticle
 };

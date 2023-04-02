@@ -12,7 +12,7 @@ import (
 type CreateArticleWithTagsForm struct {
 	Title       *string `form:"title" binding:"required,omitempty"`
 	Content     *string `form:"content" binding:"required"`
-	Slug        *string `form:"slug" binding:"required"`
+	Slug        *string `form:"slug" binding:"required,min=0"`
 	Description *string `form:"description" binding:"required"`
 	Banner      *string `form:"banner" binding:"required"`
 	Tags        *string `form:"tags" binding:"required,min=1"`
@@ -126,4 +126,26 @@ func (b *business) GetArticleBySlug(ctx *gin.Context) (result database.ArticleWi
 	}
 
 	return result, nil
+}
+
+// remove article request
+type RemoveArticleForm struct {
+	Id *int64 `form:"id" binding:"required,min=0"`
+}
+
+func (b *business) RemoveArticle(ctx *gin.Context) (int64, error) {
+	var form RemoveArticleForm
+
+	if err := ctx.Bind(&form); err != nil {
+		return 0, err
+	}
+
+	reqCtx := ctx.Request.Context()
+	err := b.storage.RemoveArticleWithTags(reqCtx, *form.Id)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return *form.Id, nil
 }

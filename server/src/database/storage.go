@@ -365,3 +365,23 @@ func (s *storage) GetArticleWithTagsBySlug(ctx context.Context, arg GetArticleBy
 
 	return result, err
 }
+
+func (s *storage) RemoveArticleWithTags(ctx context.Context, id int64) error {
+	err := s.execTX(ctx, func(q *Queries) error {
+		var err error
+
+		err = q.RemoveAllArticleTags(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		err = q.RemoveArticle(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		return err
+	})
+
+	return err
+}

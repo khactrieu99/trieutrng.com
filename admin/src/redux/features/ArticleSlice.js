@@ -75,6 +75,23 @@ export const updateArticle = createAsyncThunk(
   }
 )
 
+export const removeArticle = createAsyncThunk(
+  "articles/removeArticle",
+  async(id, { dispatch, extra: { api }, rejectWithValue }) => {
+    try {
+      dispatch(setLoadingStatus("on"));
+      const res = await api.removeArticle(id);
+      return res.data;
+    } catch(err) {
+      // move to notification
+      console.log(err.response.data.error);
+      rejectWithValue(err.response.data.error)
+    } finally {
+      dispatch(setLoadingStatus("off"));
+    }
+  }
+)
+
 const articleSlice = createSlice({
   name: "articles",
   initialState,
@@ -113,6 +130,14 @@ const articleSlice = createSlice({
         const foundIndex = state.articles.findIndex(a => a.id === action.payload.id);
         if (foundIndex != -1) {
           state.articles[foundIndex] = action.payload;
+        }
+      })
+
+    builder
+      .addCase(removeArticle.fulfilled, (state, action) => {
+        const foundIndex = state.articles.findIndex(a => a.id === action.payload.id);
+        if (foundIndex != -1) {
+          state.articles.splice(foundIndex, 1);
         }
       })
   }

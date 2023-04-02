@@ -59,7 +59,7 @@ function ArticleEditor(props) {
   const onTextChange = (e) => {
     e.preventDefault();
     setUpdatable();
-    lodashSet(articleData, e.target.name, e.target.value);
+    lodashSet(articleData, e.target.name, e.target.value || "");
   }
 
   const onMarkdownChange = (md) => {

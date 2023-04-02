@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.article`
+  position: relative;
   height: auto;
   min-height: 200px;
   width: 900px;
@@ -123,17 +124,40 @@ export const Thumbnail = styled.a`
   background-size: cover;
   background-position: center;
   grid-area: image;
-  // height: 100%;
   width: 30%;
-
-  background-color: #f73;
-
-  &:hover {
-    cursor: pointer;
-  }
 
   @media (max-width: 750px) {
     width: 100%;
     height: 250px;
+  }
+`
+
+export const CloseBtn = styled.div`
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  opacity: 0.3;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:before, &:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #333;
+  }
+
+  &:before {
+    transform: rotate(45deg);
+  }
+  &:after {
+    transform: rotate(-45deg);
   }
 `

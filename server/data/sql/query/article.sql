@@ -22,3 +22,6 @@ UPDATE articles
 SET title = $2, content = $3, slug = $4, description = $5, banner = $6
 WHERE id = $1
 RETURNING *;
+
+-- name: RemoveArticle :exec
+DELETE FROM articles WHERE id = $1;

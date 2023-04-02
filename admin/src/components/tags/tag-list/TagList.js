@@ -1,8 +1,10 @@
 import useConfirmPopup from "hooks/useConfirmPopup";
 import { memo, useMemo } from "react";
 import { Container, TagItem } from "./style";
+import useAuth from "hooks/useAuth";
 
 function TagList(props) {
+  const {sessionExists} = useAuth()
   const { doOpen } = useConfirmPopup();
   const allTags = useMemo(() => props.allTags, [props.allTags]);
 

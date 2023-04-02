@@ -1,5 +1,5 @@
 import client from "./Client";
-import { CREATE_ARTICLE, GET_ALL_ARTICLES, GET_ARTICLE_BY_SLUG, UPDATE_ARTICLE } from "./EndPoints";
+import { CREATE_ARTICLE, GET_ALL_ARTICLES, GET_ARTICLE_BY_SLUG, REMOVE_ARTICLE, UPDATE_ARTICLE } from "./EndPoints";
 
 export const getAllArticles = () => {
   const url = GET_ALL_ARTICLES;
@@ -30,6 +30,11 @@ export const updateArticle = ({id, title, content, slug, description, banner, ta
     banner,
     tags
   }));
+}
+
+export const removeArticle = (id) => {
+  const url = REMOVE_ARTICLE;
+  return client.post(url, new URLSearchParams({id}));
 }
 
 
